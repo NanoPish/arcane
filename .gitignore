@@ -2,3 +2,4 @@ venv
 .idea
 terraform/.terraform
 lock.json
+terraform/.terraform
