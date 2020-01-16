@@ -1,26 +1,23 @@
-# ---------------------------------------------------------------------------------------------------------------------
-# ENVIRONMENT VARIABLES
-# Define these secrets as environment variables
-# ---------------------------------------------------------------------------------------------------------------------
-
 # AWS_ACCESS_KEY_ID
 # AWS_SECRET_ACCESS_KEY
 
 variable "username" {
-  description = "arcane"
+  description = "Master username of the DB"
+  default = "arcane"
 }
 
 variable "password" {
-  description = "1OfsomeOfThoseVeryWeirdAndUnexpectedString!ThatIsThisOne:)HowBamboozlingRight?"
+  description = "Master password of the DB"
 }
 
 variable "database_name" {
-  description = "arcane"
+  description = "Name of the database to be created"
+  default = "arcane"
 }
 
 variable "name" {
   description = "Name of the database"
-  default     = "arcane"
+  default     = "arcane-1"
 }
 
 variable "engine_name" {
