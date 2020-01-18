@@ -29,18 +29,36 @@ Critères d’évaluation:
 - Modèle de données utilisé
 - Structuration/ Architecture du code python
 
-## Technologies choices
+## Environment and infrastructure
 
-* Python3 / Flask microservice for CRUD real estate management and authentication
+* Server: Maximizing Flask performance leveraging [Meinheld](https://meinheld.org/) serving through [Gunicorn](https://gunicorn.org/), to have multiple worker forks and threads serving, also making the app more resistant (no service loss if a worker crashes) following tiangolo's [meinheld-gunicorn-docker](https://github.com/tiangolo/meinheld-gunicorn-docker)
 
-* Server: Maximizing Flask performance leveraging Meinheld serving through Gunicorn, to have multiple worker forks and threads serving, also making the app more resistant (no service loss if a worker crashes)
-
-* Containerization through Docker to achieve scalability, standardization, consistency, flexibility, and possibility to update this project to setup an orchestrator to achieve self-healing and auto-scaling architecture
+* Containerization through [Docker](https://www.docker.com/) to achieve scalability, standardization, consistency, flexibility, and possibility to update this project to setup an orchestrator to achieve self-healing and auto-scaling architecture
 
 * Two environments, easily reproducible, local and prod
-    - A local environment to run the service in a local container, with a local mysql database
-    - A production environment to run the service in a remote container on an EC2 instance, with a RDC instance as a database
+    - A local environment to run the service in a local container, for example a local [mysql](https://www.mysql.com/) database
+    - A production environment to run the service in a remote container on an [EC2](https://aws.amazon.com/fr/ec2/) instance, with a [RDC](https://aws.amazon.com/fr/rds/) instance as a database
 
-* An abstracted and declarative infrastructure as code (IaC) production infrastructure leveraging terraform to spin up an EC2 and a RDS, in order to achieve speed, simplicity, consistency of the configuration, less risk, easier scaling management
+* TO EDIT: a production API is running on my own AWS, accessible at TO EDIT
 
-* Use of SQLAlchemy toolkit and ORM to interact with SQL databases, achieving modularity and reusability of the code, and facilitating the plugging of the service to different database providers
+* An abstracted and declarative infrastructure as code ([IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code)) production infrastructure leveraging terraform to spin up an EC2 and a RDS, in order to achieve speed, simplicity, consistency of the configuration, risk lessening, easier scaling management
+
+## Microservice dependencies
+
+* [Python3](https://www.python.org/) / [Flask](http://flask.palletsprojects.com/en/1.1.x/)
+
+* [SQLAlchemy ORM](https://www.sqlalchemy.org/) to interact with SQL databases, achieving modularity and reusability of the code, and facilitating the plugging of the service to different database providers
+
+* [pytest](https://docs.pytest.org/en/latest/), for testing
+
+* [Marshmallow](https://marshmallow.readthedocs.io/en/stable/) for data serialization/deserialization and input validation
+
+* [Flask-RESTplus](https://flask-restplus.readthedocs.io/en/stable/) for Swagger documentation
+
+* [flask_accepts](https://github.com/apryor6/flask_accepts), a that marries Marshmallow with Flask-RESTplus, giving you the control of marshmallow with the awesome Swagger documentation from flask-RESTplus
+
+## Microservice design pattern
+
+As it is my first time using Flask and after reading flask frameworks documentations and design patterns from various authors I decided to follow Aj Pryor [Flask best practices](http://alanpryorjr.com/2019-05-20-flask-api-example/)'s patterns for building "testable, scalable, and maintainable APIs".
+
+It is very well explained, and "has been battle-tested (double emphasis on the word “test”!) and works well for a big project with a large team and can easily scale to a project of any size".

@@ -1,5 +1,4 @@
 venv
 .idea
-terraform/.terraform
+terraform/.terraform/
 lock.json
-terraform/.terraform
