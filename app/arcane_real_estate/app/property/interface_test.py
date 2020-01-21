@@ -8,9 +8,9 @@ from .interface import PropertyInterface
 def interface() -> PropertyInterface:
 
     params: PropertyInterface = {
-        "property_id": 1,
         "name": "Test name",
         "description": "Test description",
+        "city": "san francisco"
     }
     return params
 

@@ -16,10 +16,10 @@ def test_PropertySchema_create(schema: PropertySchema):
 
 def test_PropertySchema_works(schema: PropertySchema):
     params: PropertyInterface = schema.load(
-        {"propertyId": 1, "name": "Test name", "description": "Test description"}
+        {"name": "Test name", "description": "Test description", "city": "tokyo"}
     )
     property = Property(**params)
 
-    assert property.property_id == 1
     assert property.name == "Test name"
     assert property.description == "Test description"
+    assert property.city == "tokyo"

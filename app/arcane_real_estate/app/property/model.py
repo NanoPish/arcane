@@ -10,6 +10,7 @@ class Property(db.Model):
     property_id = Column(Integer(), primary_key=True)
     name = Column(String(255))
     description = Column(String(255))
+    city = Column(String(255))
 
     def update(self, changes):
         for key, val in changes.items():

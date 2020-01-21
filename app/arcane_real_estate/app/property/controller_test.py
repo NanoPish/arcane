@@ -10,7 +10,7 @@ from .interface import PropertyInterface
 
 
 def property(id: int = 123, name: str = "Test name") -> Property:
-    return Property(property_id=id, name="Test name", description="Test description")
+    return Property(property_id=id, name="Test name", description="Test description", city="moscow")
 
 
 class TestPropertyResource:
@@ -45,16 +45,17 @@ class TestPropertyPropertyResource:
         lambda create_request: Property(
             name=create_request["name"],
             description=create_request["description"],
+            city=create_request["city"],
         ),
     )
     def test_post(self, client: FlaskClient):  # noqa
         with client:
 
-            payload = dict(name="Test name", description="Test description")
+            payload = dict(name="Test name", description="Test description", city="madrid")
             result: dict = client.post("/api/property/", json=payload).get_json()
             expected = (
                 PropertySchema()
-                .dump(Property(name=payload["name"], description=payload["description"]))
+                .dump(Property(name=payload["name"], description=payload["description"], city=payload["city"]))
             )
             print("result", result)
             assert result == expected

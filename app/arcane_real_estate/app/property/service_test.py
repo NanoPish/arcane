@@ -34,8 +34,8 @@ def test_update(db: SQLAlchemy):  # noqa
 
 
 def test_delete_by_id(db: SQLAlchemy):  # noqa
-    yin: Property = Property(property_id=1, name="Yin", description="Test description")
-    yang: Property = Property(property_id=2, name="Yang", description="Test description")
+    yin: Property = Property(property_id=1, name="Yin", description="Test description", city="berlin")
+    yang: Property = Property(property_id=2, name="Yang", description="Test description", city="london")
     db.session.add(yin)
     db.session.add(yang)
     db.session.commit()
@@ -50,7 +50,7 @@ def test_delete_by_id(db: SQLAlchemy):  # noqa
 def test_create(db: SQLAlchemy):  # noqa
 
     yin: PropertyInterface = PropertyInterface(
-        property_id=1, name="Yin", description="Test description"
+        name="Yin", description="Test description", city="paris"
     )
     PropertyService.create(yin)
     results: List[Property] = Property.query.all()

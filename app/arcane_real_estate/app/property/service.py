@@ -34,6 +34,7 @@ class PropertyService:
         new_property = Property(
             name=new_attrs["name"],
             description=new_attrs["description"],
+            city=new_attrs["city"],
         )
 
         db.session.add(new_property)
