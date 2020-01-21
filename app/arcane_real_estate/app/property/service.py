@@ -36,9 +36,6 @@ class PropertyService:
             description=new_attrs["description"],
         )
 
-        if "property_id" in new_attrs:
-            setattr(new_property, "property_id", new_attrs["property_id"])
-
         db.session.add(new_property)
         db.session.commit()
 

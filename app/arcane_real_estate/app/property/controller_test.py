@@ -43,7 +43,6 @@ class TestPropertyPropertyResource:
         PropertyService,
         "create",
         lambda create_request: Property(
-            property_id=create_request["property_id"],
             name=create_request["name"],
             description=create_request["description"],
         ),
@@ -57,6 +56,7 @@ class TestPropertyPropertyResource:
                 PropertySchema()
                 .dump(Property(name=payload["name"], description=payload["description"]))
             )
+            print("result", result)
             assert result == expected
 
 

@@ -25,7 +25,7 @@ def test_update(db: SQLAlchemy):  # noqa
 
     db.session.add(yin)
     db.session.commit()
-    updates = dict(property="Yang")
+    updates = dict(name="Yang")
 
     PropertyService.update(yin, updates)
 
