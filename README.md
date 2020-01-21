@@ -62,3 +62,15 @@ Critères d’évaluation:
 As it is my first time using Flask and after reading flask frameworks documentations and design patterns from various authors I decided to follow Aj Pryor [Flask best practices](http://alanpryorjr.com/2019-05-20-flask-api-example/)'s patterns for building "testable, scalable, and maintainable APIs".
 
 It is very well explained, and "has been battle-tested (double emphasis on the word “test”!) and works well for a big project with a large team and can easily scale to a project of any size".
+
+## Running the project as a developer
+
+### Running the microservice locally
+
+* To run the microservice locally, with a sqlite DB and with flask development server, which includes code autoreload:
+        
+        cd app/arcane_real_estate
+        pip install -r requirements.txt    
+        FLASK_APP=app/__init__.py:create_app FLASK_ENV=development flask run
+        
+* Access the server on localhost:5000
