@@ -1,6 +1,5 @@
 from pytest import fixture
 
-from app.product import Product
 from .model import Property
 from .interface import PropertyInterface
 

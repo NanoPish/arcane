@@ -18,7 +18,7 @@ class TestPropertyResource:
     def test_get(self, client: FlaskClient):  # noqa
         with client:
             results = client.get("/api/property", follow_redirects=True).get_json()
-            expected = PropertySchema(many=True).dump([property(456), property(123)]).data
+            expected = PropertySchema(many=True).dump([property(456), property(123)])
             for r in results:
                 assert r in expected
 
@@ -35,7 +35,6 @@ class TestPropertyPropertyResource:
             expected = (
                 PropertySchema(many=True)
                 .dump([property(123, name="Test name 1"), property(456, name="Test name 2")])
-                .data
             )
             for r in results:
                 assert r in expected
@@ -57,7 +56,6 @@ class TestPropertyPropertyResource:
             expected = (
                 PropertySchema()
                 .dump(Property(name=payload["name"], description=payload["description"]))
-                .data
             )
             assert result == expected
 
@@ -92,5 +90,5 @@ class TestPropertyPropertyIdResource:
             ).get_json()
             expected: dict = PropertySchema().dump(
                 Property(property_id=123, name="New name")
-            ).data
+            )
             assert result == expected
