@@ -21,5 +21,6 @@ def db(app):
         db.drop_all()
         db.create_all()
         yield db
+        db.session.rollback()
         db.drop_all()
         db.session.commit()

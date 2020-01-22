@@ -7,7 +7,7 @@ from .model import Type
 
 @fixture
 def type() -> Type:
-    return Type(type_id=1, name="Test name", description="Test description")
+    return Type(type_id=0, name="Test name", description="Test description")
 
 
 def test_Type_create(type: Type):

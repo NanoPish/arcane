@@ -15,6 +15,7 @@ def property(id: int = 123, name: str = "Test name") -> Property:
         name="Test name",
         description="Test description",
         city="moscow",
+        type_id=0
     )
 
 

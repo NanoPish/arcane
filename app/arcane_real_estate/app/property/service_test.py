@@ -4,7 +4,10 @@ from app.test.fixtures import app, db  # noqa
 from .model import Property
 from .service import PropertyService  # noqa
 from .interface import PropertyInterface
-
+from ..type.model_test import type
+from ..type.model import Type
+from sqlalchemy import exc
+import pytest
 
 def get_test_property_0():
     return Property(property_id=0,
@@ -19,7 +22,7 @@ def get_test_property_1():
                     name="My nice pizza box",
                     description='Good quality cardboard, SF north',
                     city='San Francisco',
-                    type_id=1)
+                    type_id=0)
 
 
 def get_property_interface_0():
@@ -29,10 +32,11 @@ def get_property_interface_0():
                              type_id=0)
 
 
-def test_get_all(db: SQLAlchemy):  # noqa
+def test_get_all(db: SQLAlchemy, type: Type):  # noqa
     property_0 = get_test_property_0()
     property_1 = get_test_property_1()
 
+    db.session.add(type)
     db.session.add(property_0)
     db.session.add(property_1)
 
@@ -44,10 +48,11 @@ def test_get_all(db: SQLAlchemy):  # noqa
     assert property_0 in results and property_1 in results
 
 
-def test_update(db: SQLAlchemy):  # noqa
+def test_update(db: SQLAlchemy, type: Type):  # noqa
     # TODO test all fields
     property_0 = get_test_property_0()
 
+    db.session.add(type)
     db.session.add(property_0)
     db.session.commit()
 
@@ -58,10 +63,11 @@ def test_update(db: SQLAlchemy):  # noqa
     assert result.name == 'New name'
 
 
-def test_delete_by_id(db: SQLAlchemy):  # noqa
+def test_delete_by_id(db: SQLAlchemy, type: Type):  # noqa
     property_0 = get_test_property_0()
     property_1 = get_test_property_1()
 
+    db.session.add(type)
     db.session.add(property_0)
     db.session.add(property_1)
 
@@ -76,8 +82,10 @@ def test_delete_by_id(db: SQLAlchemy):  # noqa
     assert property_1 not in results and property_0 in results
 
 
-def test_create(db: SQLAlchemy):  # noqa
+def test_create(db: SQLAlchemy, type: Type):  # noqa
     property_interface: PropertyInterface = get_property_interface_0()
+
+    db.session.add(type)
     PropertyService.create(property_interface)
 
     results: List[Property] = Property.query.all()
@@ -86,3 +94,16 @@ def test_create(db: SQLAlchemy):  # noqa
 
     for k in property_interface.keys():
         assert getattr(results[0], k) == property_interface[k]
+
+def test_create_dont_respect_foreign_keys(db: SQLAlchemy, type: Type):  # noqa
+    property_interface: PropertyInterface = get_property_interface_0()
+    property_interface["type_id"] = 2354
+
+    db.session.add(type)
+    try:
+        PropertyService.create(property_interface)
+    except exc.IntegrityError:
+        assert True == True
+        return True
+
+    pytest.fail("Did not trow integrity error")
