@@ -16,7 +16,11 @@ def test_PropertySchema_create(schema: PropertySchema):
 
 def test_PropertySchema_works(schema: PropertySchema):
     params: PropertyInterface = schema.load(
-        {"name": "Test name", "description": "Test description", "city": "tokyo"}
+        {
+            "name": "Test name",
+            "description": "Test description",
+            "city": "tokyo",
+        }
     )
     property = Property(**params)
 

@@ -10,7 +10,7 @@ def interface() -> PropertyInterface:
     params: PropertyInterface = {
         "name": "Test name",
         "description": "Test description",
-        "city": "san francisco"
+        "city": "san francisco",
     }
     return params
 

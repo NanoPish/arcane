@@ -1,6 +1,5 @@
 from marshmallow import fields, Schema
 
-
 class PropertySchema(Schema):
     """Property"""
 
