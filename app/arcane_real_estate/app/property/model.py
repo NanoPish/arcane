@@ -1,4 +1,5 @@
-from sqlalchemy import Integer, Column, String
+from sqlalchemy import Integer, Column, String, ForeignKey
+from sqlalchemy.orm import relationship
 from app import db  # noqa
 from .interface import PropertyInterface
 
@@ -8,9 +9,12 @@ class Property(db.Model):
 
     __tablename__ = "property"
     property_id = Column(Integer(), primary_key=True)
-    name = Column(String(255))
-    description = Column(String(255))
-    city = Column(String(255))
+    name = Column(String(255), nullable=False)
+    description = Column(String(255), nullable=False)
+    city = Column(String(255), nullable=False)
+    type_id = Column(Integer, ForeignKey('type.type_id'), nullable=False)
+
+    type = relationship("Type")
 
     def update(self, changes):
         for key, val in changes.items():

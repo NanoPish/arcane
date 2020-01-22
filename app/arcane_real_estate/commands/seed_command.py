@@ -15,9 +15,9 @@ def seed_things():
 
 def seed_thing(cls):
     things = [
-        {"name": "Big house"},
-        {"name": "Small flat"},
-        {"name": "Spacious pizza box in san francisco"},
+        # {"name": "Big house"},
+        # {"name": "Small flat"},
+        # {"name": "Spacious pizza box in san francisco"},
     ]
     db.session.bulk_insert_mappings(cls, things)
 
