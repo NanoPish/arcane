@@ -4,10 +4,11 @@ from flask_restplus import Namespace
 from flask_accepts import accepts, responds
 from flask.wrappers import Response
 from typing import List
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from .schema import PropertySchema
 from .model import Property
 from .service import PropertyService
+from ..user.service import UserService
 
 api = Namespace("Property", description="Property information")
 
@@ -25,21 +26,24 @@ class PropertyResource(Resource):
 
     @accepts(schema=PropertySchema, api=api)
     @responds(schema=PropertySchema, status_code=201)
+    @jwt_required
     def post(self):
         """Create a Single Property"""
 
-        return PropertyService.create(request.parsed_obj)
+        return PropertyService.create(request.parsed_obj, UserService.get_user_id_by_user_mail(get_jwt_identity()))
 
 
 @api.route("/<int:propertyId>")
 @api.param("propertyId", "Property database ID")
 class PropertyIdResource(Resource):
     @responds(schema=PropertySchema)
+    @jwt_required
     def get(self, propertyId: int) -> Property:
         """Get Single Property"""
 
         return PropertyService.get_by_id(propertyId)
 
+    @jwt_required
     def delete(self, propertyId: int) -> Response:
         """Delete Single Property"""
 
@@ -50,6 +54,7 @@ class PropertyIdResource(Resource):
 
     @accepts(schema=PropertySchema, api=api)
     @responds(schema=PropertySchema)
+    @jwt_required
     def put(self, propertyId: int) -> Property:
         """Update Single Property"""
 

@@ -1,9 +1,9 @@
 from app import db  # noqa
 from typing import List
-from werkzeug.exceptions import BadRequest, Conflict, Unauthorized, NotFound
+from werkzeug.exceptions import BadRequest, Conflict, Unauthorized, NotFound, InternalServerError
 from flask import jsonify
 from flask_jwt_extended import create_access_token
-
+from datetime import timedelta
 from .model import User
 from .interface import UserInterface
 
@@ -16,6 +16,11 @@ class UserService:
     @staticmethod
     def get_by_id(user_id: int) -> User:
         return User.query.get(user_id)
+
+    @staticmethod
+    def get_user_id_by_user_mail(mail: str) -> int:
+        return User.query.filter_by(mail=mail).first().user_id
+
 
     @staticmethod
     def update(user: User, user_change_updates: UserInterface) -> User:
@@ -63,8 +68,8 @@ class UserService:
         if user is None:
             raise NotFound
 
-        if user.verify_password(password) == True:
-            access_token = create_access_token(identity=mail)
+        if user.verify_password(password):
+            access_token = create_access_token(identity=mail, expires_delta=timedelta(days=1))
             return jsonify(access_token=access_token)
         else:
             raise Unauthorized

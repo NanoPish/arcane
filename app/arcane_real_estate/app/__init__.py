@@ -25,12 +25,13 @@ def create_app(env=None):
     from app.config import config_by_name
     from app.routes import register_routes
 
+    # print(config_by_name)
     authorizations = {
         'Bearer': {
             'type': 'apiKey',
             'in': 'header',
             'name': 'Authorization',
-            # 'description': "Type in the *'Value'* input box below: **'Bearer &lt;JWT&gt;'**, where JWT is the token",
+            'description': "Type in the *'Value'* input box below: **'Bearer &lt;JWT&gt;'**, where JWT is the token",
         }
     }
 

@@ -30,12 +30,13 @@ class PropertyService:
         return [property_id]
 
     @staticmethod
-    def create(new_attrs: PropertyInterface) -> Property:
+    def create(new_attrs: PropertyInterface, user_id: int) -> Property:
         new_property = Property(
             name=new_attrs["name"],
             description=new_attrs["description"],
             city=new_attrs["city"],
-            type_id=new_attrs["type_id"]
+            type_id=new_attrs["type_id"],
+            user_id=user_id,
         )
 
         db.session.add(new_property)

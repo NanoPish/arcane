@@ -11,4 +11,5 @@ class PropertySchema(Schema):
     description = fields.String(attribute="description")
     city = fields.String(attribute="city")
     typeId = fields.Number(attribute="type_id")
+    userId = fields.Number(attribute="user_id")
 
