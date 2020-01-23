@@ -32,17 +32,16 @@ class UserService:
 
     @staticmethod
     def create(new_attrs: UserInterface) -> User:
-        new_user = User(
-            first_name=new_attrs["first_name"],
-            last_name=new_attrs["last_name"],
-            birth_date=new_attrs["birth_date"],
-            mail=new_attrs["mail"],
-        )
-
-        mail = new_attrs['mail']
-        password = new_attrs['password']
-
-        if mail is None or password is None:
+        try:
+            new_user = User(
+                first_name=new_attrs["first_name"],
+                last_name=new_attrs["last_name"],
+                birth_date=new_attrs["birth_date"],
+                mail=new_attrs["mail"],
+            )
+            mail = new_attrs['mail']
+            password = new_attrs['password']
+        except KeyError:
             raise BadRequest()
 
         if User.query.filter_by(mail=mail).first() is not None:

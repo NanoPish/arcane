@@ -12,7 +12,7 @@ class User(db.Model):
     first_name = Column(String(255), nullable=False)
     last_name = Column(String(255), nullable=False)
     birth_date = Column(Date, nullable=False)
-    mail = db.Column(db.String(64), index=True, nullable=False)
+    mail = db.Column(db.String(64), index=True, nullable=False, unique=True)
     password_hash = db.Column(db.String(128), nullable=False)
 
 

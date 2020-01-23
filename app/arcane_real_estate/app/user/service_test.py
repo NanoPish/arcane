@@ -6,6 +6,8 @@ from .model import User
 from .service import UserService  # noqa
 from .interface import UserInterface
 import datetime
+from werkzeug.exceptions import BadRequest, Conflict
+import pytest
 
 date_now = datetime.datetime.now().date()
 
@@ -24,7 +26,7 @@ def get_test_user_1():
         first_name="Another firstname",
         last_name="Another lastname",
         birth_date=date_now,
-        mail="user@user.user",
+        mail="user2@user.user",
         password_hash="asdf",
     )
 
@@ -92,3 +94,33 @@ def test_create(db: SQLAlchemy):  # noqa
     del yin['password']
     for k in yin.keys():
         assert getattr(results[0], k) == yin[k]
+
+def test_create_duplicate_mail(db: SQLAlchemy):  # noqa
+    yin: UserInterface = get_user_interface_0()
+    UserService.create(yin)
+    try:
+        UserService.create(yin)
+    except Conflict:
+        db.session.rollback()
+        results: List[User] = User.query.all()
+        assert len(results) == 1
+        del yin['password']
+        for k in yin.keys():
+            assert getattr(results[0], k) == yin[k]
+        return 0
+
+    assert True == False
+
+@pytest.mark.parametrize("missing", ['password', 'mail', 'first_name'])
+def test_create_no_password(db: SQLAlchemy, missing):  # noqa
+    yin: UserInterface = get_user_interface_0()
+    del yin[missing]
+    try:
+        UserService.create(yin)
+    except BadRequest:
+        db.session.rollback()
+        results: List[User] = User.query.all()
+        assert len(results) == 0
+        return 0
+
+    assert True == False
