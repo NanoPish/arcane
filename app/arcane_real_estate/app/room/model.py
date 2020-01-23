@@ -14,5 +14,6 @@ class Room(db.Model):
 
     def update(self, changes):
         for key, val in changes.items():
-            setattr(self, key, val)
+            if key not in ["room_id", "property_id"]:
+                setattr(self, key, val)
         return

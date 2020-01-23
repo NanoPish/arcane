@@ -13,5 +13,6 @@ class Type(db.Model):
 
     def update(self, changes):
         for key, val in changes.items():
-            setattr(self, key, val)
+            if key not in ["type_id"]:
+                setattr(self, key, val)
         return

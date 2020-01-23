@@ -19,7 +19,8 @@ class User(db.Model):
 
     def update(self, changes):
         for key, val in changes.items():
-            setattr(self, key, val)
+            if key not in ["user_id", "password_hash", "mail"]:
+                setattr(self, key, val)
         return
 
     def hash_password(self, password) -> None:

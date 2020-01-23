@@ -5,13 +5,13 @@ from flask_accepts import accepts, responds
 from flask.wrappers import Response
 from typing import List
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from werkzeug.exceptions import NotFound
 from .schema import PropertySchema
 from .model import Property
 from .service import PropertyService
 from ..user.service import UserService
 
 api = Namespace("Property", description="Property information")
-
 
 @api.route("/")
 class PropertyResource(Resource):
@@ -49,7 +49,7 @@ class PropertyIdResource(Resource):
 
         from flask import jsonify
 
-        id = PropertyService.delete_by_id(propertyId)
+        id = PropertyService.delete_by_id(propertyId, UserService.get_user_id_by_user_mail(get_jwt_identity()))
         return jsonify(dict(status="Success", id=id))
 
     @accepts(schema=PropertySchema, api=api)
@@ -60,4 +60,8 @@ class PropertyIdResource(Resource):
 
         changes = request.parsed_obj
         property = PropertyService.get_by_id(propertyId)
-        return PropertyService.update(property, changes)
+
+        if property is None:
+            raise NotFound
+
+        return PropertyService.update(property, changes, UserService.get_user_id_by_user_mail(get_jwt_identity()))

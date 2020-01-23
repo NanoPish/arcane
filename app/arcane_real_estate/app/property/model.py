@@ -21,5 +21,6 @@ class Property(db.Model):
 
     def update(self, changes):
         for key, val in changes.items():
-            setattr(self, key, val)
+            if key not in ["property_id", "user_id"]:
+                setattr(self, key, val)
         return

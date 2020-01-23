@@ -1,6 +1,6 @@
 from app import db  # noqa
 from typing import List
-from werkzeug.exceptions import BadRequest, Conflict, Unauthorized, NotFound, InternalServerError
+from werkzeug.exceptions import BadRequest, Conflict, Unauthorized, NotFound
 from flask import jsonify
 from flask_jwt_extended import create_access_token
 from datetime import timedelta

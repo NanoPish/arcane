@@ -1,5 +1,5 @@
 from typing import List
-
+from werkzeug.exceptions import Unauthorized
 from app import db  # noqa
 from .model import Property
 from .interface import PropertyInterface
@@ -15,18 +15,30 @@ class PropertyService:
         return Property.query.get(property_id)
 
     @staticmethod
-    def update(property: Property, property_change_updates: PropertyInterface) -> Property:
-        property.update(property_change_updates)
+    def update(property_to_update: Property,
+               property_change_updates: PropertyInterface,
+               user_id: int) -> Property:
+
+        if property_to_update.user_id != user_id:
+            raise Unauthorized
+
+        property_to_update.update(property_change_updates)
         db.session.commit()
-        return property
+
+        return property_to_update
 
     @staticmethod
-    def delete_by_id(property_id: int) -> List[int]:
+    def delete_by_id(property_id: int, user_id: int) -> List[int]:
         property = Property.query.filter(Property.property_id == property_id).first()
+
         if not property:
             return []
+        if property.user_id != user_id:
+            raise Unauthorized
+
         db.session.delete(property)
         db.session.commit()
+
         return [property_id]
 
     @staticmethod
