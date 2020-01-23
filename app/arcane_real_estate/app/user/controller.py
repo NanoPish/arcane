@@ -24,7 +24,7 @@ class UserResource(Resource):
         return UserService.get_all()
 
     @accepts(schema=NewUserSchema, api=api)
-    @responds(schema=ExistingUserSchema)
+    @responds(schema=ExistingUserSchema, status_code=201)
     def post(self):
         """Create a Single User"""
 
