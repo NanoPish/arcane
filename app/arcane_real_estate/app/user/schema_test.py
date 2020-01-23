@@ -1,6 +1,6 @@
 from pytest import fixture
 from .model import User
-from .schema import ExistingUserSchema
+from .schema import UserSchema
 from .interface import UserInterface
 import datetime
 
@@ -19,15 +19,15 @@ def user_json() -> dict:
 
 
 @fixture
-def schema() -> ExistingUserSchema:
-    return ExistingUserSchema()
+def schema() -> UserSchema:
+    return UserSchema()
 
 
-def test_ExistingUserSchema_create(schema: ExistingUserSchema):
+def test_UserSchema_create(schema: UserSchema):
     assert schema
 
 
-def test_ExistingUserSchema_works(schema: ExistingUserSchema, user_json: dict):
+def test_UserSchema_works(schema: UserSchema, user_json: dict):
     params: UserInterface = schema.load(
         user_json
     )

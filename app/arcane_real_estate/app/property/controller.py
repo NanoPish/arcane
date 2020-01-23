@@ -24,7 +24,7 @@ class PropertyResource(Resource):
 
         return PropertyService.get_all()
 
-    @accepts(schema=PropertySchema, api=api)
+    @accepts("NewProperty", schema=PropertySchema(exclude=["propertyId", "userId"]), api=api)
     @responds(schema=PropertySchema, status_code=201)
     @jwt_required
     def post(self):
@@ -52,7 +52,7 @@ class PropertyIdResource(Resource):
         id = PropertyService.delete_by_id(propertyId, UserService.get_user_id_by_user_mail(get_jwt_identity()))
         return jsonify(dict(status="Success", id=id))
 
-    @accepts(schema=PropertySchema, api=api)
+    @accepts("NewProperty", schema=PropertySchema(exclude=["propertyId", "userId"]), api=api)
     @responds(schema=PropertySchema)
     @jwt_required
     def put(self, propertyId: int) -> Property:

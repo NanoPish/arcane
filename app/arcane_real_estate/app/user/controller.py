@@ -4,7 +4,7 @@ from flask_accepts import accepts, responds
 from flask.wrappers import Response
 from typing import List
 
-from .schema import ExistingUserSchema, NewUserSchema, AuthUserSchema
+from .schema import UserSchema
 from .model import User
 from .service import UserService
 from flask import jsonify, request
@@ -16,7 +16,7 @@ api = Namespace("User", description="User management")
 class UserAuthResource(Resource):
     """User Auth"""
 
-    @accepts(schema=AuthUserSchema, api=api)
+    @accepts("AuthUser", schema=UserSchema(only=["mail", "password"]), api=api)
     def post(self):
         """Authenticate a Single User"""
 
@@ -37,14 +37,14 @@ class UserAuthResource(Resource):
 class UserResource(Resource):
     """Users"""
 
-    @responds(schema=ExistingUserSchema, many=True)
+    @responds("ExistingUser", schema=UserSchema(exclude=["password"]), many=True)
     def get(self) -> List[User]:
         """Get all Users"""
 
         return UserService.get_all()
 
-    @accepts(schema=NewUserSchema, api=api)
-    @responds(schema=ExistingUserSchema, status_code=201)
+    @accepts("NewUser", schema=UserSchema(exclude=["userId"]), api=api)
+    @responds("ExistingUser", schema=UserSchema(exclude=["password"]), status_code=201)
     def post(self):
         """Create a Single User"""
 
@@ -55,7 +55,7 @@ class UserResource(Resource):
 @api.route("/<int:userId>")
 @api.param("userId", "User database ID")
 class UserIdResource(Resource):
-    @responds(schema=ExistingUserSchema)
+    @responds("ExistingUser", schema=UserSchema(exclude=["password"]))
     def get(self, userId: int) -> User:
         """Get Single User"""
 
@@ -69,8 +69,8 @@ class UserIdResource(Resource):
         id = UserService.delete_by_id(userId)
         return jsonify(dict(status="Success", id=id))
 
-    @accepts(schema=ExistingUserSchema, api=api)
-    @responds(schema=ExistingUserSchema)
+    @accepts("UpdateUser", schema=UserSchema(exclude=["password", "userId"]), api=api)
+    @responds("ExistingUser", schema=UserSchema(exclude=["password"]))
     def put(self, userId: int) -> User:
         """Update Single User"""
 

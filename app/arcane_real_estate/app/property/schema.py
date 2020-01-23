@@ -1,5 +1,6 @@
 from marshmallow import fields, Schema
 
+
 class PropertySchema(Schema):
     """Property"""
 
@@ -12,4 +13,3 @@ class PropertySchema(Schema):
     city = fields.String(attribute="city")
     typeId = fields.Number(attribute="type_id")
     userId = fields.Number(attribute="user_id")
-

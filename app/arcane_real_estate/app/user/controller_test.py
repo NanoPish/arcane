@@ -1,11 +1,9 @@
 from unittest.mock import patch
 from flask.testing import FlaskClient
-from flask.wrappers import Response
 import datetime
 
-from app.test.fixtures import client, app  # noqa
 from .model import User
-from .schema import ExistingUserSchema
+from .schema import UserSchema
 from .service import UserService
 from .interface import UserInterface
 
@@ -25,7 +23,7 @@ class TestUserResource:
     def test_get(self, client: FlaskClient):  # noqa
         with client:
             results = client.get("/api/user", follow_redirects=True).get_json()
-            expected = ExistingUserSchema(many=True).dump([existing_user(456), existing_user(123)])
+            expected = UserSchema(many=True).dump([existing_user(456), existing_user(123)])
             for r in results:
                 assert r in expected
 
@@ -40,7 +38,7 @@ class TestUserUserResource:
         with client:
             results: dict = client.get("/api/user", follow_redirects=True).get_json()
             expected = (
-                ExistingUserSchema(many=True)
+                UserSchema(many=True)
                     .dump([existing_user(123, first_name="Test first name 1"), existing_user(456, first_name="Test first name 2")])
 
             )
@@ -67,7 +65,7 @@ class TestUserUserResource:
             )
             result: dict = client.post("/api/user/", json=payload).get_json()
             expected = (
-                ExistingUserSchema()
+                UserSchema()
                     .dump(User(
                     first_name=payload["firstName"],
                     last_name=payload["lastName"],
@@ -107,7 +105,7 @@ class TestUserUserIdResource:
             result: dict = client.put(
                 "/api/user/123", json={"firstName": "New name"}
             ).get_json()
-            expected: dict = ExistingUserSchema().dump(
+            expected: dict = UserSchema().dump(
                 User(user_id=123, first_name="New name")
             )
             assert result == expected
