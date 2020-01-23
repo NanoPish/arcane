@@ -4,7 +4,7 @@ from flask_restplus import Namespace
 from flask_accepts import accepts, responds
 from flask.wrappers import Response
 from typing import List
-
+from flask_jwt_extended import jwt_required
 from .schema import PropertySchema
 from .model import Property
 from .service import PropertyService
@@ -17,6 +17,7 @@ class PropertyResource(Resource):
     """Properties"""
 
     @responds(schema=PropertySchema, many=True)
+    @jwt_required
     def get(self) -> List[Property]:
         """Get all Properties"""
 

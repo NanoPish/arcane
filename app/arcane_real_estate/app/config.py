@@ -9,7 +9,7 @@ class BaseConfig:
     USE_MOCK_EQUIVALENCY = False
     DEBUG = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
+    # SERVER_NAME="TEST"
 
 class DevelopmentConfig(BaseConfig):
     CONFIG_NAME = "dev"

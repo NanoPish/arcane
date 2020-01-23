@@ -124,7 +124,7 @@ def test_create_no_password(db: SQLAlchemy, missing):  # noqa
 
     assert True is False
 
-def test_authenticate(db: SQLAlchemy):  # noqa
+def test_authenticate():  # noqa
     yin: UserInterface = get_user_interface_0()
     UserService.create(yin)
     results: List[User] = User.query.all()

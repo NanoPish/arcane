@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, json
 from flask_sqlalchemy import SQLAlchemy
 from flask_restplus import Api
 from sqlalchemy import event
@@ -9,8 +9,8 @@ from flask_jwt_extended import (
     get_jwt_identity
 )
 
-
 db = SQLAlchemy()
+
 
 # make sqlite enforce FK constraints
 @event.listens_for(Engine, "connect")
@@ -20,15 +20,26 @@ def _set_sqlite_pragma(dbapi_connection, connection_record):
         cursor.execute("PRAGMA foreign_keys=ON;")
         cursor.close()
 
+
 def create_app(env=None):
     from app.config import config_by_name
     from app.routes import register_routes
 
+    authorizations = {
+        'Bearer': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization',
+            # 'description': "Type in the *'Value'* input box below: **'Bearer &lt;JWT&gt;'**, where JWT is the token",
+        }
+    }
+
     app = Flask(__name__)
     app.config.from_object(config_by_name[env or "test"])
-    api = Api(app, title="Arcanific API", version="0.1.0")
+    api = Api(app, title="Arcanific API", version="0.1.0", security="Bearer", authorizations=authorizations)
 
     register_routes(api, app)
+
     db.init_app(app)
 
     @app.route("/health")
@@ -36,5 +47,8 @@ def create_app(env=None):
         return jsonify("healthy")
 
     jwt = JWTManager(app)
+
+    # with app.app_context():
+    #     print(json.dumps(api.__schema__))
 
     return app
