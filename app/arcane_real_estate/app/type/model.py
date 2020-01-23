@@ -4,7 +4,7 @@ from .interface import TypeInterface
 
 
 class Type(db.Model):
-    """A Flaskerific Type"""
+    """A Arcanific Type"""
 
     __tablename__ = "type"
     type_id = Column(Integer(), primary_key=True)

@@ -8,7 +8,7 @@ from .model import Property
 
 @fixture
 def property() -> Property:
-    return Property(property_id=1, name="Test name", description="Test description", city="berlin", type_id=0)
+    return Property(property_id=0, name="Test name", description="Test description", city="berlin", type_id=0)
 
 
 def test_Property_create(property: Property):

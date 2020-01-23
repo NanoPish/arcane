@@ -32,9 +32,9 @@ class RoomService:
     @staticmethod
     def create(new_attrs: RoomInterface) -> Room:
         new_room = Room(
-            room_id=new_attrs["room_id"],
             name=new_attrs["name"],
             description=new_attrs["description"],
+            property_id=new_attrs["property_id"],
         )
 
         db.session.add(new_room)
