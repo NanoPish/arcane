@@ -85,7 +85,6 @@ def test_delete_by_id(db: SQLAlchemy):  # noqa
 
 
 def test_create(db: SQLAlchemy):  # noqa
-
     yin: UserInterface = get_user_interface_0()
     UserService.create(yin)
     results: List[User] = User.query.all()
@@ -109,7 +108,7 @@ def test_create_duplicate_mail(db: SQLAlchemy):  # noqa
             assert getattr(results[0], k) == yin[k]
         return 0
 
-    assert True == False
+    assert True is False
 
 @pytest.mark.parametrize("missing", ['password', 'mail', 'first_name'])
 def test_create_no_password(db: SQLAlchemy, missing):  # noqa
@@ -123,4 +122,13 @@ def test_create_no_password(db: SQLAlchemy, missing):  # noqa
         assert len(results) == 0
         return 0
 
-    assert True == False
+    assert True is False
+
+def test_authenticate(db: SQLAlchemy):  # noqa
+    yin: UserInterface = get_user_interface_0()
+    UserService.create(yin)
+    results: List[User] = User.query.all()
+
+    assert len(results) == 1
+    user: User = results[0]
+    assert user.verify_password(yin["password"]) is True

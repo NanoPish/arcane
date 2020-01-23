@@ -1,7 +1,8 @@
 from sqlalchemy import Integer, Column, String, Date
 from sqlalchemy.orm import relationship
-from app import db # noqa
+from app import db  # noqa
 from passlib.hash import pbkdf2_sha256
+
 
 class User(db.Model):
     """A Arcanific User"""
@@ -13,7 +14,6 @@ class User(db.Model):
     birth_date = Column(Date, nullable=False)
     mail = db.Column(db.String(64), index=True, nullable=False, unique=True)
     password_hash = db.Column(db.String(128), nullable=False)
-
 
     properties = relationship("Property", back_populates="user")
 
