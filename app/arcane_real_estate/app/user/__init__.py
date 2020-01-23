@@ -1,6 +1,4 @@
 from .model import User  # noqa
-from .schema import UserSchema  # noqa
-
 
 def register_routes(root_api, root="/api"):
     from .controller import api as user_api

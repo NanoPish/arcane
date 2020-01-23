@@ -5,7 +5,8 @@ from flask_accepts import accepts, responds
 from flask.wrappers import Response
 from typing import List
 
-from .schema import UserSchema
+from .schema import ExistingUserSchema
+from .schema import NewUserSchema
 from .model import User
 from .service import UserService
 
@@ -16,24 +17,25 @@ api = Namespace("User", description="User information")
 class UserResource(Resource):
     """Users"""
 
-    @responds(schema=UserSchema, many=True)
+    @responds(schema=ExistingUserSchema, many=True)
     def get(self) -> List[User]:
         """Get all Users"""
 
         return UserService.get_all()
 
-    @accepts(schema=UserSchema, api=api)
-    @responds(schema=UserSchema)
+    @accepts(schema=NewUserSchema, api=api)
+    @responds(schema=ExistingUserSchema)
     def post(self):
         """Create a Single User"""
 
-        return UserService.create(request.parsed_obj)
+        user = UserService.create(request.parsed_obj)
+        return user
 
 
 @api.route("/<int:userId>")
 @api.param("userId", "User database ID")
 class UserIdResource(Resource):
-    @responds(schema=UserSchema)
+    @responds(schema=ExistingUserSchema)
     def get(self, userId: int) -> User:
         """Get Single User"""
 
@@ -47,8 +49,8 @@ class UserIdResource(Resource):
         id = UserService.delete_by_id(userId)
         return jsonify(dict(status="Success", id=id))
 
-    @accepts(schema=UserSchema, api=api)
-    @responds(schema=UserSchema)
+    @accepts(schema=ExistingUserSchema, api=api)
+    @responds(schema=ExistingUserSchema)
     def put(self, userId: int) -> User:
         """Update Single User"""
 

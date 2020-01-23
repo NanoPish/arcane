@@ -13,7 +13,7 @@ class Property(db.Model):
     description = Column(String(255), nullable=False)
     city = Column(String(255), nullable=False)
     type_id = Column(Integer, ForeignKey('type.type_id'), nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.user_id'))
 
     rooms = relationship("Room")
     type = relationship("Type")

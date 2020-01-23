@@ -1,24 +1,31 @@
 from unittest.mock import patch
 from flask.testing import FlaskClient
 from flask.wrappers import Response
+import datetime
 
 from app.test.fixtures import client, app  # noqa
 from .model import User
-from .schema import UserSchema
+from .schema import ExistingUserSchema
 from .service import UserService
 from .interface import UserInterface
 
 
-def user(id: int = 123, name: str = "Test name") -> User:
-    return User(user_id=id, name="Test name", description="Test description")
+date_now = datetime.datetime.now().date()
+
+def existing_user(id: int, first_name: str = "Test first name") -> User:
+    return User(user_id=id,
+                first_name=first_name,
+                last_name="Test last name",
+                mail="user@user.user",
+                birth_date=date_now)
 
 
 class TestUserResource:
-    @patch.object(UserService, "get_all", lambda: [user(123), user(456)])
+    @patch.object(UserService, "get_all", lambda: [existing_user(123), existing_user(456)])
     def test_get(self, client: FlaskClient):  # noqa
         with client:
             results = client.get("/api/user", follow_redirects=True).get_json()
-            expected = UserSchema(many=True).dump([user(456), user(123)])
+            expected = ExistingUserSchema(many=True).dump([existing_user(456), existing_user(123)])
             for r in results:
                 assert r in expected
 
@@ -27,14 +34,14 @@ class TestUserUserResource:
     @patch.object(
         UserService,
         "get_all",
-        lambda: [user(123, name="Test name 1"), user(456, name="Test name 2")],
+        lambda: [existing_user(123, first_name="Test first name 1"), existing_user(456, first_name="Test first name 2")],
     )
     def test_get(self, client: FlaskClient):  # noqa
         with client:
             results: dict = client.get("/api/user", follow_redirects=True).get_json()
             expected = (
-                UserSchema(many=True)
-                .dump([user(123, name="Test name 1"), user(456, name="Test name 2")])
+                ExistingUserSchema(many=True)
+                    .dump([existing_user(123, first_name="Test first name 1"), existing_user(456, first_name="Test first name 2")])
 
             )
             for r in results:
@@ -44,18 +51,29 @@ class TestUserUserResource:
         UserService,
         "create",
         lambda create_request: User(
-            name=create_request["name"],
-            description=create_request["description"],
+            first_name=create_request["first_name"],
+            last_name=create_request["last_name"],
+            birth_date=create_request["birth_date"],
+            mail=create_request["mail"],
         ),
     )
     def test_post(self, client: FlaskClient):  # noqa
         with client:
-
-            payload = dict(name="Test name", description="Test description")
+            payload = dict(
+                firstName="Test first name",
+                lastName="Test last name",
+                birthDate=str(date_now),
+                mail="user@user.user",
+            )
             result: dict = client.post("/api/user/", json=payload).get_json()
             expected = (
-                UserSchema()
-                .dump(User(name=payload["name"], description=payload["description"]))
+                ExistingUserSchema()
+                    .dump(User(
+                    first_name=payload["firstName"],
+                    last_name=payload["lastName"],
+                    birth_date=date_now,
+                    mail=payload["mail"],
+                ))
 
             )
             assert result == expected
@@ -63,7 +81,7 @@ class TestUserUserResource:
 
 def fake_update(user: User, changes: UserInterface) -> User:
     # To fake an update, just return a new object
-    updated_user = User(user_id=user.user_id, name=changes["name"])
+    updated_user = User(user_id=user.user_id, first_name=changes["first_name"])
     return updated_user
 
 
@@ -87,9 +105,9 @@ class TestUserUserIdResource:
     def test_put(self, client: FlaskClient):  # noqa
         with client:
             result: dict = client.put(
-                "/api/user/123", json={"name": "New name"}
+                "/api/user/123", json={"firstName": "New name"}
             ).get_json()
-            expected: dict = UserSchema().dump(
-                User(user_id=123, name="New name")
+            expected: dict = ExistingUserSchema().dump(
+                User(user_id=123, first_name="New name")
             )
             assert result == expected

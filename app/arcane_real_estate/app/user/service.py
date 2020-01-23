@@ -1,4 +1,5 @@
 from typing import List
+from werkzeug.exceptions import BadRequest, Conflict
 
 from app import db  # noqa
 from .model import User
@@ -32,10 +33,22 @@ class UserService:
     @staticmethod
     def create(new_attrs: UserInterface) -> User:
         new_user = User(
-            user_id=new_attrs["user_id"],
-            name=new_attrs["name"],
-            description=new_attrs["description"],
+            first_name=new_attrs["first_name"],
+            last_name=new_attrs["last_name"],
+            birth_date=new_attrs["birth_date"],
+            mail=new_attrs["mail"],
         )
+
+        mail = new_attrs['mail']
+        password = new_attrs['password']
+
+        if mail is None or password is None:
+            raise BadRequest()
+
+        if User.query.filter_by(mail=mail).first() is not None:
+            raise Conflict()
+
+        new_user.hash_password(password)
 
         db.session.add(new_user)
         db.session.commit()
