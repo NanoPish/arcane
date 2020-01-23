@@ -23,7 +23,7 @@ class RoomResource(Resource):
         return RoomService.get_all()
 
     @accepts(schema=RoomSchema, api=api)
-    @responds(schema=RoomSchema)
+    @responds(schema=RoomSchema, status_code=201)
     def post(self):
         """Create a Single Room"""
 

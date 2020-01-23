@@ -45,7 +45,7 @@ class UserService:
             raise BadRequest()
 
         if User.query.filter_by(mail=mail).first() is not None:
-            raise Conflict()
+            raise Conflict("Existing mail")
 
         new_user.hash_password(password)
 

@@ -23,7 +23,7 @@ class PropertyResource(Resource):
         return PropertyService.get_all()
 
     @accepts(schema=PropertySchema, api=api)
-    @responds(schema=PropertySchema)
+    @responds(schema=PropertySchema, status_code=201)
     def post(self):
         """Create a Single Property"""
 

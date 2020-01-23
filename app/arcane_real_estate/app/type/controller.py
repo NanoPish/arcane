@@ -23,7 +23,7 @@ class TypeResource(Resource):
         return TypeService.get_all()
 
     @accepts(schema=TypeSchema, api=api)
-    @responds(schema=TypeSchema)
+    @responds(schema=TypeSchema, status_code=201)
     def post(self):
         """Create a Single Type"""
 

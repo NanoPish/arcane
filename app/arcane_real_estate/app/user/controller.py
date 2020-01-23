@@ -10,7 +10,7 @@ from .schema import NewUserSchema
 from .model import User
 from .service import UserService
 
-api = Namespace("User", description="User information")
+api = Namespace("User", description="User management")
 
 
 @api.route("/")
