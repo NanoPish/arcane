@@ -1,8 +1,7 @@
 from sqlalchemy import Integer, Column, String, Date
 from sqlalchemy.orm import relationship
-from app import db  # noqa
-from .interface import UserInterface
-from passlib.apps import custom_app_context as pwd_context
+from app import db # noqa
+from passlib.hash import pbkdf2_sha256
 
 class User(db.Model):
     """A Arcanific User"""
@@ -23,8 +22,8 @@ class User(db.Model):
             setattr(self, key, val)
         return
 
-    def hash_password(self, password):
-        self.password_hash = pwd_context.encrypt(password)
+    def hash_password(self, password) -> None:
+        self.password_hash = pbkdf2_sha256.hash(password)
 
-    def verify_password(self, password):
-        return pwd_context.verify(password, self.password_hash)
+    def verify_password(self, password) -> bool:
+        return pbkdf2_sha256.verify(password, self.password_hash)

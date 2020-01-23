@@ -1,5 +1,6 @@
 from marshmallow import fields, Schema
 
+
 class ExistingUserSchema(Schema):
     """ExistingUser"""
 
@@ -13,7 +14,18 @@ class ExistingUserSchema(Schema):
     birthDate = fields.Date(attribute="birth_date")
     mail = fields.String(attribute="mail")
 
+
 class NewUserSchema(ExistingUserSchema):
     """NewUser"""
 
+    password = fields.String(attribute="password")
+
+
+class AuthUserSchema(Schema):
+    """"LoginUser"""
+
+    class Meta:
+        ordered = True
+
+    mail = fields.String(attribute="mail")
     password = fields.String(attribute="password")

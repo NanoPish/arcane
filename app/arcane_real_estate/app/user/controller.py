@@ -1,16 +1,36 @@
 from flask_restplus import Resource
-from flask import request
 from flask_restplus import Namespace
 from flask_accepts import accepts, responds
 from flask.wrappers import Response
 from typing import List
 
-from .schema import ExistingUserSchema
-from .schema import NewUserSchema
+from .schema import ExistingUserSchema, NewUserSchema, AuthUserSchema
 from .model import User
 from .service import UserService
+from flask import jsonify, request
 
 api = Namespace("User", description="User management")
+
+
+@api.route("/auth")
+class UserAuthResource(Resource):
+    """User Auth"""
+
+    @accepts(schema=AuthUserSchema, api=api)
+    def post(self):
+        """Authenticate a Single User"""
+
+        if not request.is_json:
+            return jsonify({"msg": "Missing JSON in request"}), 400
+
+        mail = request.json.get('mail', None)
+        password = request.json.get('password', None)
+        if not mail:
+            return jsonify({"msg": "Missing username parameter"}), 400
+        if not password:
+            return jsonify({"msg": "Missing password parameter"}), 400
+
+        return UserService.authenticate(mail, password)
 
 
 @api.route("/")

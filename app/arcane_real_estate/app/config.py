@@ -20,7 +20,7 @@ class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = False
     SQLALCHEMY_DATABASE_URI = "sqlite:///{0}/app-dev.db".format(basedir)
-
+    JWT_SECRET_KEY = 'supersecret'
 
 class TestingConfig(BaseConfig):
     CONFIG_NAME = "test"
@@ -29,7 +29,7 @@ class TestingConfig(BaseConfig):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///{0}/app-test.db".format(basedir)
-
+    JWT_SECRET_KEY = 'supersecret'
 
 class ProductionConfig(BaseConfig):
     CONFIG_NAME = "prod"
@@ -38,6 +38,7 @@ class ProductionConfig(BaseConfig):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = False
     SQLALCHEMY_DATABASE_URI = "sqlite:///{0}/app-prod.db".format(basedir)
+    JWT_SECRET_KEY = 'supersecret'
 
 
 EXPORT_CONFIGS: List[Type[BaseConfig]] = [

@@ -1,7 +1,9 @@
-from typing import List
-from werkzeug.exceptions import BadRequest, Conflict
-
 from app import db  # noqa
+from typing import List
+from werkzeug.exceptions import BadRequest, Conflict, Unauthorized, NotFound
+from flask import jsonify
+from flask_jwt_extended import create_access_token
+
 from .model import User
 from .interface import UserInterface
 
@@ -53,3 +55,16 @@ class UserService:
         db.session.commit()
 
         return new_user
+
+    @staticmethod
+    def authenticate(mail: str, password: str) -> dict:
+        user: User = User.query.filter_by(mail=mail).first()
+
+        if user is None:
+            raise NotFound
+
+        if user.verify_password(password) == True:
+            access_token = create_access_token(identity=mail)
+            return jsonify(access_token=access_token)
+        else:
+            raise Unauthorized

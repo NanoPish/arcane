@@ -1,9 +1,13 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_restplus import Api
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from sqlite3 import Connection as SQLite3Connection
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    get_jwt_identity
+)
 
 
 db = SQLAlchemy()
@@ -30,5 +34,7 @@ def create_app(env=None):
     @app.route("/health")
     def health():
         return jsonify("healthy")
+
+    jwt = JWTManager(app)
 
     return app
