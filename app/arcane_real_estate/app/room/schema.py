@@ -10,3 +10,4 @@ class RoomSchema(Schema):
     roomId = fields.Number(attribute="room_id")
     name = fields.String(attribute="name")
     description = fields.String(attribute="description")
+    propertyId = fields.Number(attribute="property_id")

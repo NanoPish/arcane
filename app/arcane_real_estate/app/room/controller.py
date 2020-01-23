@@ -12,26 +12,27 @@ from .service import RoomService
 api = Namespace("Room", description="Room information")
 
 
-@api.route("/")
+@api.route("/property/<int:propertyId>")
+@api.param("roomId", "Property unique ID")
 class RoomResource(Resource):
     """Rooms"""
 
     @responds(schema=RoomSchema, many=True)
-    def get(self) -> List[Room]:
-        """Get all Rooms"""
+    def get(self, propertyId: int) -> List[Room]:
+        """Get all Rooms that belongs to a property"""
 
-        return RoomService.get_all()
+        return RoomService.get_by_property_id(propertyId)
 
     @accepts(schema=RoomSchema, api=api)
     @responds(schema=RoomSchema, status_code=201)
-    def post(self):
-        """Create a Single Room"""
+    def post(self, propertyId: int):
+        """Create a Single Room attached to a property"""
 
-        return RoomService.create(request.parsed_obj)
+        return RoomService.create(request.parsed_obj, propertyId)
 
 
 @api.route("/<int:roomId>")
-@api.param("roomId", "Room database ID")
+@api.param("roomId", "Room unique ID")
 class RoomIdResource(Resource):
     @responds(schema=RoomSchema)
     def get(self, roomId: int) -> Room:

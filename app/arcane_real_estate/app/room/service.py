@@ -15,6 +15,10 @@ class RoomService:
         return Room.query.get(room_id)
 
     @staticmethod
+    def get_by_property_id(property_id: int) -> Room:
+        return Room.query.filter(Room.property_id == property_id)
+
+    @staticmethod
     def update(room: Room, room_change_updates: RoomInterface) -> Room:
         room.update(room_change_updates)
         db.session.commit()
@@ -30,11 +34,11 @@ class RoomService:
         return [room_id]
 
     @staticmethod
-    def create(new_attrs: RoomInterface) -> Room:
+    def create(new_attrs: RoomInterface, property_id: int) -> Room:
         new_room = Room(
             name=new_attrs["name"],
             description=new_attrs["description"],
-            property_id=new_attrs["property_id"],
+            property_id=property_id,
         )
 
         db.session.add(new_room)
