@@ -83,6 +83,8 @@ As it is my first time using Flask and after reading flask frameworks documentat
 
 ### Running the microservice locally
 
+* Install python 3.7+ and docker
+
 * To run the microservice locally, with a sqlite DB and with flask development server, which includes code autoreload:
         
         cd app/arcane_real_estate
