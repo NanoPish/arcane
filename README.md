@@ -33,7 +33,7 @@ Critères d’évaluation:
 
 * Server: Maximizing Flask performance leveraging [Meinheld](https://meinheld.org/) serving through [Gunicorn](https://gunicorn.org/), to have multiple worker forks and threads serving, also making the app more resistant (no service loss if a worker crashes) following tiangolo's [meinheld-gunicorn-docker](https://github.com/tiangolo/meinheld-gunicorn-docker)
 
-* Containerization through [Docker](https://www.docker.com/) to achieve scalability, standardization, consistency, flexibility, and possibility to update this project to setup an orchestrator to achieve self-healing and auto-scaling architecture
+* Containerization through [Docker](https://www.docker.com/)
 
 * Two environments, easily reproducible, local and prod
     - A local environment to run the service in a local container, for example with the bundled sqlite database

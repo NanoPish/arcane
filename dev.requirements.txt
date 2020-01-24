@@ -1,1 +1,0 @@
-flaskerize==0.12
