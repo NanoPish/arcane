@@ -15,6 +15,10 @@ class PropertyService:
         return Property.query.get(property_id)
 
     @staticmethod
+    def get_user_id_from_property_id(property_id: int) -> int:
+        return Property.query.get(property_id).user_id
+
+    @staticmethod
     def update(property_to_update: Property,
                property_change_updates: PropertyInterface,
                user_id: int) -> Property:

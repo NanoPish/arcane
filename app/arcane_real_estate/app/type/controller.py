@@ -4,7 +4,7 @@ from flask_restplus import Namespace
 from flask_accepts import accepts, responds
 from flask.wrappers import Response
 from typing import List
-
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from .schema import TypeSchema
 from .model import Type
 from .service import TypeService
@@ -17,6 +17,7 @@ class TypeResource(Resource):
     """Types"""
 
     @responds(schema=TypeSchema, many=True)
+    @jwt_required
     def get(self) -> List[Type]:
         """Get all Types"""
 
@@ -24,6 +25,7 @@ class TypeResource(Resource):
 
     @accepts(schema=TypeSchema, api=api)
     @responds(schema=TypeSchema, status_code=201)
+    @jwt_required
     def post(self):
         """Create a Single Type"""
 
@@ -34,6 +36,7 @@ class TypeResource(Resource):
 @api.param("typeId", "Type database ID")
 class TypeIdResource(Resource):
     @responds(schema=TypeSchema)
+    @jwt_required
     def get(self, typeId: int) -> Type:
         """Get Single Type"""
 
@@ -49,6 +52,7 @@ class TypeIdResource(Resource):
 
     @accepts(schema=TypeSchema, api=api)
     @responds(schema=TypeSchema)
+    @jwt_required
     def put(self, typeId: int) -> Type:
         """Update Single Type"""
 

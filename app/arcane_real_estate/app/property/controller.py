@@ -10,8 +10,12 @@ from .schema import PropertySchema
 from .model import Property
 from .service import PropertyService
 from ..user.service import UserService
+from ..room.schema import RoomSchema
+from ..room.service import RoomService
+from ..room.model import Room
 
 api = Namespace("Property", description="Property information")
+
 
 @api.route("/")
 class PropertyResource(Resource):
@@ -65,3 +69,25 @@ class PropertyIdResource(Resource):
             raise NotFound
 
         return PropertyService.update(property, changes, UserService.get_user_id_by_user_mail(get_jwt_identity()))
+
+
+@api.route("/<int:propertyId>/rooms")
+@api.param("propertyId", "Property unique ID")
+class RoomResource(Resource):
+    """Rooms"""
+
+    @responds(schema=RoomSchema, many=True)
+    @jwt_required
+    def get(self, propertyId: int) -> List[Room]:
+        """Get all Rooms that belongs to a property"""
+
+        return RoomService.get_by_property_id(propertyId)
+
+    @accepts("NewRoom", schema=RoomSchema(exclude=["propertyId", "roomId"]), api=api)
+    @responds(schema=RoomSchema, status_code=201)
+    @jwt_required
+    def post(self, propertyId: int):
+        """Create a Single Room attached to a property"""
+
+        return RoomService.create(request.parsed_obj, propertyId,
+                                  UserService.get_user_id_by_user_mail(get_jwt_identity()))

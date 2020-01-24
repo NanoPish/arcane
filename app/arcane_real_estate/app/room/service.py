@@ -1,9 +1,9 @@
 from typing import List
-
+from werkzeug.exceptions import Unauthorized
 from app import db  # noqa
 from .model import Room
 from .interface import RoomInterface
-
+from ..property.service import PropertyService
 
 class RoomService:
     @staticmethod
@@ -34,7 +34,10 @@ class RoomService:
         return [room_id]
 
     @staticmethod
-    def create(new_attrs: RoomInterface, property_id: int) -> Room:
+    def create(new_attrs: RoomInterface, property_id: int, current_user_id) -> Room:
+        if PropertyService.get_user_id_from_property_id(property_id) != current_user_id:
+            raise Unauthorized
+
         new_room = Room(
             name=new_attrs["name"],
             description=new_attrs["description"],
