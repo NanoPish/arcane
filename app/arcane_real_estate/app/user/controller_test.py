@@ -2,6 +2,7 @@ from unittest.mock import patch
 from flask.testing import FlaskClient
 import datetime
 
+from app.test.fixtures import client, app  # noqa
 from .model import User
 from .schema import UserSchema
 from .service import UserService

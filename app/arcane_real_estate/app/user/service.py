@@ -21,7 +21,6 @@ class UserService:
     def get_user_id_by_user_mail(mail: str) -> int:
         return User.query.filter_by(mail=mail).first().user_id
 
-
     @staticmethod
     def update(user: User, user_change_updates: UserInterface) -> User:
         user.update(user_change_updates)

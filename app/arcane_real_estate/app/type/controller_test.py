@@ -2,7 +2,7 @@ from unittest.mock import patch
 from flask.testing import FlaskClient
 from flask.wrappers import Response
 
-from app.test.fixtures import client, app  # noqa
+from ..test.fixtures import client, app  # noqa
 from .model import Type
 from .schema import TypeSchema
 from .service import TypeService

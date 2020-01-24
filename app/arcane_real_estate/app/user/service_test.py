@@ -1,6 +1,6 @@
 from app.test.fixtures import app, db  # noqa
 from flask_sqlalchemy import SQLAlchemy
-
+from werkzeug.exceptions import BadRequest, Conflict, Unauthorized, NotFound
 from typing import List
 from .model import User
 from .service import UserService  # noqa
@@ -10,6 +10,7 @@ from werkzeug.exceptions import BadRequest, Conflict
 import pytest
 
 date_now = datetime.datetime.now().date()
+
 
 def get_test_user_0():
     return User(
@@ -94,6 +95,7 @@ def test_create(db: SQLAlchemy):  # noqa
     for k in yin.keys():
         assert getattr(results[0], k) == yin[k]
 
+
 def test_create_duplicate_mail(db: SQLAlchemy):  # noqa
     yin: UserInterface = get_user_interface_0()
     UserService.create(yin)
@@ -110,6 +112,7 @@ def test_create_duplicate_mail(db: SQLAlchemy):  # noqa
 
     assert True is False
 
+
 @pytest.mark.parametrize("missing", ['password', 'mail', 'first_name'])
 def test_create_no_password(db: SQLAlchemy, missing):  # noqa
     yin: UserInterface = get_user_interface_0()
@@ -124,7 +127,8 @@ def test_create_no_password(db: SQLAlchemy, missing):  # noqa
 
     assert True is False
 
-def test_authenticate():  # noqa
+
+def test_authenticate(db: SQLAlchemy):  # noqa
     yin: UserInterface = get_user_interface_0()
     UserService.create(yin)
     results: List[User] = User.query.all()
@@ -132,3 +136,8 @@ def test_authenticate():  # noqa
     assert len(results) == 1
     user: User = results[0]
     assert user.verify_password(yin["password"]) is True
+    try:
+        UserService.authenticate(yin["mail"], yin["password"])
+        return 0
+    except Unauthorized:
+        assert True is False

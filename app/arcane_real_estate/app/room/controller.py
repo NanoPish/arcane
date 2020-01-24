@@ -3,7 +3,6 @@ from flask import request
 from flask_restplus import Namespace
 from flask_accepts import accepts, responds
 from flask.wrappers import Response
-from typing import List
 from werkzeug.exceptions import Unauthorized
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from .schema import RoomSchema

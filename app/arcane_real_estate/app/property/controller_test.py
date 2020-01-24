@@ -1,29 +1,34 @@
-from unittest.mock import patch
 from flask.testing import FlaskClient
-from flask.wrappers import Response
-
-from app.test.fixtures import client, app  # noqa
+from app.test.fixtures import app, db, client  # noqa
+from unittest.mock import patch
 from .model import Property
 from .schema import PropertySchema
 from .service import PropertyService
 from .interface import PropertyInterface
-
+from flask_jwt_extended import create_access_token
+from flask_sqlalchemy import SQLAlchemy
+from ..user.service_test import get_test_user_0
 
 def property(id: int = 123, name: str = "Test name") -> Property:
     return Property(
-        property_id=id,
         name="Test name",
         description="Test description",
         city="moscow",
-        type_id=0
+        type_id=0,
+        user_id=0,
     )
 
 
 class TestPropertyResource:
     @patch.object(PropertyService, "get_all", lambda: [property(123), property(456)])
-    def test_get(self, client: FlaskClient):  # noqa
+    def test_get(self, client: FlaskClient, db):  # noqa
         with client:
-            results = client.get("/api/property", follow_redirects=True).get_json()
+            access_token = create_access_token(get_test_user_0().mail)
+            headers = {
+                'Authorization': 'Bearer {}'.format(access_token)
+            }
+            results = client.get("/api/property", follow_redirects=True,
+                                 headers=headers).get_json()
             expected = PropertySchema(many=True).dump([property(456), property(123)])
             for r in results:
                 assert r in expected
@@ -35,9 +40,14 @@ class TestPropertyPropertyResource:
         "get_all",
         lambda: [property(123, name="Test name 1"), property(456, name="Test name 2")],
     )
-    def test_get(self, client: FlaskClient):  # noqa
+    def test_get(self, client: FlaskClient, db):  # noqa
         with client:
-            results: dict = client.get("/api/property", follow_redirects=True).get_json()
+            access_token = create_access_token(get_test_user_0().mail)
+            headers = {
+                'Authorization': 'Bearer {}'.format(access_token)
+            }
+            results = client.get("/api/property", follow_redirects=True,
+                                 headers=headers).get_json()
             expected = (
                 PropertySchema(many=True)
                     .dump([property(123, name="Test name 1"), property(456, name="Test name 2")])
@@ -54,14 +64,20 @@ class TestPropertyPropertyResource:
             city=create_request["city"],
         ),
     )
-    def test_post(self, client: FlaskClient):  # noqa
+    def test_post(self, client: FlaskClient, db: SQLAlchemy):  # noqa
+        user = get_test_user_0()
+        db.session.add(user)
         with client:
             payload = dict(
                 name="Test name",
                 description="Test description",
                 city="madrid",
             )
-            result: dict = client.post("/api/property/", json=payload).get_json()
+            access_token = create_access_token(user.mail)
+            headers = {
+                'Authorization': 'Bearer {}'.format(access_token)
+            }
+            result: dict = client.post("/api/property/", json=payload, headers=headers).get_json()
             expected = (
                 PropertySchema()
                     .dump(Property(
