@@ -36,7 +36,7 @@ Critères d’évaluation:
 * Containerization through [Docker](https://www.docker.com/) to achieve scalability, standardization, consistency, flexibility, and possibility to update this project to setup an orchestrator to achieve self-healing and auto-scaling architecture
 
 * Two environments, easily reproducible, local and prod
-    - A local environment to run the service in a local container, for example a local [mysql](https://www.mysql.com/) database
+    - A local environment to run the service in a local container, for example with the bundled sqlite database
     - A production environment to run the service in a remote container on an [EC2](https://aws.amazon.com/fr/ec2/) instance, with a [RDC](https://aws.amazon.com/fr/rds/) instance as a database
 
 * TO EDIT: a production API is running on my own AWS, accessible at TO EDIT
@@ -61,9 +61,25 @@ Critères d’évaluation:
 
 As it is my first time using Flask and after reading flask frameworks documentations and design patterns from various authors I decided to follow Aj Pryor [Flask best practices](http://alanpryorjr.com/2019-05-20-flask-api-example/)'s patterns for building "testable, scalable, and maintainable APIs".
 
-It is very well explained, and "has been battle-tested (double emphasis on the word “test”!) and works well for a big project with a large team and can easily scale to a project of any size".
+"In a nutshell, Flask requests are routed using RESTplus Resources, input data is validated with a Marshmallow schema, some data processing occurs via a service interacting with a model, and then the output is serialized back to JSON on the way out, again using Marshmallow. All of this is documented via interactive Swagger docs, and flask_accepts serves as glue that under-the-hood maps each Marshmallow schema into an equivalent Flask-RESTplus API model so that these two amazing-but-somewhat-incompatible technologies can happily be used together."
 
-## Running the project as a developer
+## The Arcanific project overview
+
+* 4 functional sectors / entities that can be CRUD managed in a RESTful way
+    - Property: a real estate commodity possed by a user
+    - User: a real estate owner
+    - Type: types of property (e.g. house, flat...)
+    - Rooms: property can have rooms attached to them
+
+* Each entity is composed of a folder containing:
+
+    - Model: Python representation of entities
+    - Interface: Defines types that make an entity
+    - Controller: Orchestrates routes, services, schemas for entities
+    - Schema: Serialization/deserialization of entities
+    - Service: Performs CRUD and manipulation of entities
+    
+* And the corresponding .test files
 
 ### Running the microservice locally
 
@@ -73,4 +89,39 @@ It is very well explained, and "has been battle-tested (double emphasis on the w
         pip install -r requirements.txt    
         FLASK_APP=app/__init__.py:create_app FLASK_ENV=development flask run
         
-* Access the server on localhost:5000
+* Access the swagger / server on localhost:5000
+
+### Run the tests
+
+        cd app/arcane_real_estate
+        pytest
+        
+### Authentication
+
+* Authorization: Bearer ... model, using [flask-jwt-extended](https://flask-jwt-extended.readthedocs.io/en/stable/)
+
+* Hashing using [passlib](https://passlib.readthedocs.io/en/stable/)
+
+* Authentication and authorization using @jwt_required decorators and verifying user identity when required
+
+### How to use
+
+* Navigate the microservice using swagger at localhost:5000
+* First create an user, by posting to /users, then auth at /user/auth
+* Then create properties and rooms
+* Users can only delete, modify, add rooms, remove rooms, update rooms for properties that belong to them
+
+### Cool features
+
+* Wire any SQL database local or remote by modiying config.py thanks to SQLAlchemy agnosticism
+* Seed the DB using python manage.py seed.db
+* Swagger doc. semi automated using flask-restplus
+* Swagger doc. configured to let user enter it's auth token to test more easily
+* Different configs to compartment test, dev, prod DBs
+
+### Unfinished things
+* I did not add the location header to the api responses because of a problem I did not manage to fix with flask_accepts
+* I did not finish the testing as it is very long to do
+* Lot of tests failing as I did not rewrite them all after refactoring
+        
+ 
