@@ -127,10 +127,10 @@ As it is my first time using Flask and after reading flask frameworks documentat
 * I did not add the location header to the api responses because of a problem I did not manage to fix with flask_accepts
 * I did not finish the testing as it is very long to do
 * Lot of tests failing as I did not rewrite them all after refactoring
+* Did not deploy to terraformed instances
+* Did not make a docker-compose for dev env / prod
         
  ### run in docker on localhost:5222
-* build and run
+docker build .
 
-
-    docker build .
-    docker run -p 5222:80 -e APP_MODULE=arcane_real_estate.wsgi:app -it test
+docker run -p 5222:80 -e APP_MODULE=arcane_real_estate.wsgi:app -it test
