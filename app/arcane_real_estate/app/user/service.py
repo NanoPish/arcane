@@ -1,4 +1,4 @@
-from app import db  # noqa
+from .. import db  # noqa
 from typing import List
 from werkzeug.exceptions import BadRequest, Conflict, Unauthorized, NotFound
 from flask import jsonify

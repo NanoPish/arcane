@@ -1,8 +1,7 @@
 from unittest.mock import patch
 from flask.testing import FlaskClient
 from flask.wrappers import Response
-
-from ...app.test.fixtures import client, app  # noqa
+from ..test.fixtures import client, app  # noqa
 from .model import Room
 from .schema import RoomSchema
 from .service import RoomService
@@ -34,7 +33,7 @@ class TestRoomRoomResource:
             results: dict = client.get("/api/room", follow_redirects=True).get_json()
             expected = (
                 RoomSchema(many=True)
-                .dump([room(123, name="Test name 1"), room(456, name="Test name 2")])
+                    .dump([room(123, name="Test name 1"), room(456, name="Test name 2")])
 
             )
             for r in results:
@@ -50,12 +49,11 @@ class TestRoomRoomResource:
     )
     def test_post(self, client: FlaskClient):  # noqa
         with client:
-
             payload = dict(name="Test name", description="Test description")
             result: dict = client.post("/api/room/", json=payload).get_json()
             expected = (
                 RoomSchema()
-                .dump(Room(name=payload["name"], description=payload["description"]))
+                    .dump(Room(name=payload["name"], description=payload["description"]))
 
             )
             assert result == expected

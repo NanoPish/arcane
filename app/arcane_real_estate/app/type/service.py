@@ -1,6 +1,5 @@
 from typing import List
-
-from app import db  # noqa
+from .. import db  # noqa
 from .model import Type
 from .interface import TypeInterface
 

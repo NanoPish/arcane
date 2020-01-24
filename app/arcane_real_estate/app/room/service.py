@@ -1,6 +1,6 @@
 from typing import List
 from werkzeug.exceptions import Unauthorized
-from app import db  # noqa
+from .. import db  # noqa
 from .model import Room
 from .interface import RoomInterface
 from ..property.service import PropertyService

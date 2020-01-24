@@ -1,7 +1,7 @@
 from pytest import fixture
 from flask_sqlalchemy import SQLAlchemy
 
-from ...app.test.fixtures import app, db  # noqa
+from ..test.fixtures import app, db  # noqa
 from .model import Type
 
 

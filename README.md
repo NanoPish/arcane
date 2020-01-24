@@ -124,4 +124,6 @@ As it is my first time using Flask and after reading flask frameworks documentat
 * I did not finish the testing as it is very long to do
 * Lot of tests failing as I did not rewrite them all after refactoring
         
+ ### run in docker manually
  
+    docker run -p 5222:80 -e APP_MODULE=arcane_real_estate.wsgi:app -it test

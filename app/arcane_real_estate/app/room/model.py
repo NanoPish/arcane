@@ -1,5 +1,5 @@
 from sqlalchemy import Integer, Column, String, ForeignKey
-from app import db  # noqa
+from .. import db  # noqa
 from .interface import RoomInterface
 
 

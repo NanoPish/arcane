@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from typing import List
-from app.test.fixtures import app, db  # noqa
+from ..test.fixtures import app, db  # noqa
 from .model import Property
 from .service import PropertyService  # noqa
 from .interface import PropertyInterface
