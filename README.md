@@ -39,7 +39,7 @@ Critères d’évaluation:
     - A local environment to run the service in a local container, for example with the bundled sqlite database
     - A production environment to run the service in a remote container on an [EC2](https://aws.amazon.com/fr/ec2/) instance, with a [RDC](https://aws.amazon.com/fr/rds/) instance as a database
 
-* TO EDIT: a production API is running on my own AWS, accessible at TO EDIT
+* TO DO: deploy on aws
 
 * An abstracted and declarative infrastructure as code ([IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code)) production infrastructure leveraging terraform to spin up an EC2 and a RDS, in order to achieve speed, simplicity, consistency of the configuration, risk lessening, easier scaling management
 
@@ -59,7 +59,7 @@ Critères d’évaluation:
 
 ## Microservice design pattern
 
-As it is my first time using Flask and after reading flask frameworks documentations and design patterns from various authors I decided to follow Aj Pryor [Flask best practices](http://alanpryorjr.com/2019-05-20-flask-api-example/)'s patterns for building "testable, scalable, and maintainable APIs".
+As it is my first time using Flask and after reading flask frameworks documentations and design patterns from various authors I decided to follow Aj Pryor's [Flask best practices](http://alanpryorjr.com/2019-05-20-flask-api-example/) patterns for building "testable, scalable, and maintainable APIs".
 
 "In a nutshell, Flask requests are routed using RESTplus Resources, input data is validated with a Marshmallow schema, some data processing occurs via a service interacting with a model, and then the output is serialized back to JSON on the way out, again using Marshmallow. All of this is documented via interactive Swagger docs, and flask_accepts serves as glue that under-the-hood maps each Marshmallow schema into an equivalent Flask-RESTplus API model so that these two amazing-but-somewhat-incompatible technologies can happily be used together."
 
@@ -118,12 +118,17 @@ As it is my first time using Flask and after reading flask frameworks documentat
 * Swagger doc. semi automated using flask-restplus
 * Swagger doc. configured to let user enter it's auth token to test more easily
 * Different configs to compartment test, dev, prod DBs
+* Tests
+* Modularity / reusable code thanks to design pattern and encapsulated app / components
 
 ### Unfinished things
 * I did not add the location header to the api responses because of a problem I did not manage to fix with flask_accepts
 * I did not finish the testing as it is very long to do
 * Lot of tests failing as I did not rewrite them all after refactoring
         
- ### run in docker manually
- 
+ ### run in docker on localhost:5222
+* build and run
+
+
+    docker build .
     docker run -p 5222:80 -e APP_MODULE=arcane_real_estate.wsgi:app -it test
