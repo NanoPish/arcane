@@ -88,7 +88,7 @@ As it is my first time using Flask and after reading flask frameworks documentat
 * To run the microservice locally, with a sqlite DB and with flask development server, which includes code autoreload:
         
         cd app/arcane_real_estate
-        pip install -r requirements.txt    
+        python3.7 -m pip install -r requirements.txt    
         FLASK_APP=app/__init__.py:create_app FLASK_ENV=development flask run
         
 * Access the swagger / server on localhost:5000
