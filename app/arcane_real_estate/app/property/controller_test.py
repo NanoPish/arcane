@@ -1,5 +1,5 @@
 from flask.testing import FlaskClient
-from app.test.fixtures import app, db, client  # noqa
+from ...app.test.fixtures import app, db, client  # noqa
 from unittest.mock import patch
 from .model import Property
 from .schema import PropertySchema

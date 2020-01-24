@@ -1,7 +1,7 @@
 FROM tiangolo/meinheld-gunicorn-flask:python3.7
 
-COPY /app/arcane_real_estate /app
+COPY ./app /app
 
 WORKDIR /app
 
-RUN pip install -r requirements.txt
+RUN pip install -r arcane_real_estate/requirements.txt

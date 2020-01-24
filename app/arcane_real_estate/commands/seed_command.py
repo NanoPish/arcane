@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 from flask_script import Command
 
-from app import db
-from app.property import Property
+from ..app import db
+from ..app.property import Property
 
 
 def seed_things():

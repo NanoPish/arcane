@@ -1,4 +1,4 @@
-from app.test.fixtures import app, db  # noqa
+from ...app.test.fixtures import app, db  # noqa
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import BadRequest, Conflict, Unauthorized, NotFound
 from typing import List
